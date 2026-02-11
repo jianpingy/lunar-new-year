@@ -89,8 +89,18 @@ def format_result_card(user_correct, user_gain, family_results, secret_key, tota
     status_msg = "✅ Correct!" if user_correct else "❌ Wrong!"
     status_color = "#2e7d32" if user_correct else "#b71c1c"
     
-    rows = "".join([f"<li style='margin-bottom:2px;'>{'✅' if d['correct'] else '❌'} {n}: {d['guess']} {f'- <span style=color:#d32f2f>+${d['gain']}</span>' if d['gain']>0 else ''}</li>" for n, d in family_results.items()])
-
+    rows = "".join([
+        f"<li style='margin-bottom:2px;'>"
+        f"{'✅' if d['correct'] else '❌'} {n}: {d['guess']} "
+        f"{gain_html}"
+        f"</li>"
+        for n, d in family_results.items()
+        for gain_html in [
+            f"- <span style='color:#d32f2f'>+${d['gain']}</span>"
+            if d['gain'] > 0 else ""
+        ]
+    ])
+    
     return f"""
 <div style="border: 2px dashed #b71c1c; border-radius: 12px; padding: 15px; background-color: #fff5f5; color: #b71c1c;">
     <h3 style="margin: 0; text-align: center;">📬 Grandma's Verdict</h3>
